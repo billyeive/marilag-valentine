@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For My Marilag 💖</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #ffd6e8, #ffeaf4);
+    overflow: hidden;
+    text-align: center;
+}
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    backdrop-filter: blur(15px);
+    background: rgba(255, 192, 203, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    font-size: 24px;
+    font-weight: bold;
+    color: #ff2e88;
+    cursor: pointer;
+}
+
+.container {
+    position: relative;
+    top: 20vh;
+}
+
+h1 {
+    font-size: 32px;
+    color: #ff2e88;
+}
+
+button {
+    padding: 12px 25px;
+    margin: 15px;
+    border: none;
+    border-radius: 30px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#yesBtn {
+    background: #ff4da6;
+    color: white;
+}
+
+#noBtn {
+    background: white;
+    color: #ff4da6;
+    position: absolute;
+}
+
+#response {
+    margin-top: 20px;
+    font-size: 20px;
+    color: #ff2e88;
+}
+
+footer {
+    position: fixed;
+    bottom: 10px;
+    width: 100%;
+    font-size: 14px;
+    color: #ff2e88;
+}
+
+/* Shake animation */
+@keyframes shake {
+    0% { transform: translate(2px, 2px); }
+    25% { transform: translate(-2px, -2px); }
+    50% { transform: translate(2px, -2px); }
+    75% { transform: translate(-2px, 2px); }
+    100% { transform: translate(0px, 0px); }
+}
+
+.shake {
+    animation: shake 0.4s;
+}
+
+/* Fireworks canvas */
+canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="overlay" onclick="startExperience()">
+    Tap to start the magic 💖
+</div>
+
+<audio id="bgMusic" loop>
+    <source src="love.mp3" type="audio/mpeg">
+</audio>
+
+<canvas id="fireworks"></canvas>
+
+<div class="container">
+    <h1>Marilag 💖<br>Will you be my Valentine?</h1>
+    <button id="yesBtn" onclick="yesClick()">Yes 💘</button>
+    <button id="noBtn">No 💔</button>
+    <div id="response"></div>
+</div>
+
+<footer>
+    Forever yours, Bilal ur boyfriend 💖
+</footer>
+
+<script>
+const music = document.getElementById("bgMusic");
+const overlay = document.querySelector(".overlay");
+const noBtn = document.getElementById("noBtn");
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let fireworks = [];
+
+function startExperience() {
+    overlay.style.display = "none";
+    music.volume = 0;
+    music.play();
+    fadeInMusic();
+}
+
+function fadeInMusic() {
+    let vol = 0;
+    let fade = setInterval(() => {
+        if (vol < 1) {
+            vol += 0.05;
+            music.volume = vol;
+        } else {
+            clearInterval(fade);
+        }
+    }, 200);
+}
+
+function yesClick() {
+    document.body.classList.add("shake");
+    setTimeout(() => {
+        document.body.classList.remove("shake");
+    }, 400);
+
+    document.getElementById("response").innerHTML =
+        "Well no shit, you are my girlfriend 💖😂";
+
+    launchFireworks();
+}
+
+noBtn.addEventListener("mouseover", () => {
+    noBtn.style.top = Math.random() * 80 + "%";
+    noBtn.style.left = Math.random() * 80 + "%";
+});
+
+function launchFireworks() {
+    for (let i = 0; i < 5; i++) {
+        fireworks.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            radius: 5,
+            color: `hsl(${Math.random() * 360}, 100%, 60%)`,
+            life: 100
+        });
+    }
+}
+
+function animate() {
+    requestAnimationFrame(animate);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    fireworks.forEach((fw, index) => {
+        ctx.beginPath();
+        ctx.arc(fw.x, fw.y, fw.radius, 0, Math.PI * 2);
+        ctx.fillStyle = fw.color;
+        ctx.fill();
+        fw.radius += 2;
+        fw.life--;
+        if (fw.life <= 0) {
+            fireworks.splice(index, 1);
+        }
+    });
+}
+
+animate();
+</script>
+
+</body>
+</html>
