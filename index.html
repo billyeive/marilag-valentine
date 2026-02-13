@@ -10,32 +10,43 @@ body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, #ffd6e8, #ffeaf4);
-    overflow: hidden;
     text-align: center;
+    overflow-x: hidden;
+}
+
+/* Soft glow blur background */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at 30% 30%, #ffc0cb88, transparent 40%),
+                radial-gradient(circle at 70% 70%, #ff69b488, transparent 40%);
+    filter: blur(60px);
+    z-index: -1;
 }
 
 .overlay {
     position: fixed;
     inset: 0;
-    backdrop-filter: blur(15px);
+    backdrop-filter: blur(20px);
     background: rgba(255, 192, 203, 0.4);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 10;
     font-size: 24px;
     font-weight: bold;
     color: #ff2e88;
     cursor: pointer;
+    z-index: 10;
 }
 
 .container {
-    position: relative;
-    top: 20vh;
+    margin-top: 15vh;
+    padding: 20px;
 }
 
 h1 {
-    font-size: 32px;
+    font-size: 28px;
     color: #ff2e88;
 }
 
@@ -64,22 +75,24 @@ button {
     margin-top: 20px;
     font-size: 20px;
     color: #ff2e88;
+    font-weight: bold;
 }
 
-footer {
-    position: fixed;
-    bottom: 10px;
-    width: 100%;
-    font-size: 14px;
-    color: #ff2e88;
+/* Slideshow */
+.slideshow img {
+    width: 250px;
+    height: auto;
+    border-radius: 20px;
+    margin-top: 20px;
+    box-shadow: 0 10px 25px rgba(255,105,180,0.4);
 }
 
-/* Shake animation */
+/* Shake */
 @keyframes shake {
-    0% { transform: translate(2px, 2px); }
-    25% { transform: translate(-2px, -2px); }
-    50% { transform: translate(2px, -2px); }
-    75% { transform: translate(-2px, 2px); }
+    0% { transform: translate(3px, 3px); }
+    25% { transform: translate(-3px, -3px); }
+    50% { transform: translate(3px, -3px); }
+    75% { transform: translate(-3px, 3px); }
     100% { transform: translate(0px, 0px); }
 }
 
@@ -87,11 +100,16 @@ footer {
     animation: shake 0.4s;
 }
 
-/* Fireworks canvas */
 canvas {
     position: fixed;
     inset: 0;
     pointer-events: none;
+}
+
+footer {
+    margin-top: 40px;
+    color: #ff2e88;
+    font-size: 14px;
 }
 </style>
 </head>
@@ -103,21 +121,27 @@ canvas {
 </div>
 
 <audio id="bgMusic" loop>
-    <source src="love.mp3" type="audio/mpeg">
+    <source src="love.mp3.mp3" type="audio/mpeg">
 </audio>
 
 <canvas id="fireworks"></canvas>
 
 <div class="container">
     <h1>Marilag 💖<br>Will you be my Valentine?</h1>
+
     <button id="yesBtn" onclick="yesClick()">Yes 💘</button>
     <button id="noBtn">No 💔</button>
-    <div id="response"></div>
-</div>
 
-<footer>
-    Forever yours, Bilal ur boyfriend 💖
-</footer>
+    <div id="response"></div>
+
+    <div class="slideshow">
+        <img id="slide" src="photo1.jpg">
+    </div>
+
+    <footer>
+        Forever yours, Bilal ur boyfriend 💖
+    </footer>
+</div>
 
 <script>
 const music = document.getElementById("bgMusic");
@@ -131,6 +155,7 @@ canvas.height = window.innerHeight;
 
 let fireworks = [];
 
+/* Start Music */
 function startExperience() {
     overlay.style.display = "none";
     music.volume = 0;
@@ -150,6 +175,7 @@ function fadeInMusic() {
     }, 200);
 }
 
+/* Yes Click */
 function yesClick() {
     document.body.classList.add("shake");
     setTimeout(() => {
@@ -162,13 +188,24 @@ function yesClick() {
     launchFireworks();
 }
 
+/* No Button Run Away */
 noBtn.addEventListener("mouseover", () => {
-    noBtn.style.top = Math.random() * 80 + "%";
-    noBtn.style.left = Math.random() * 80 + "%";
+    noBtn.style.top = Math.random() * 70 + "%";
+    noBtn.style.left = Math.random() * 70 + "%";
 });
 
+/* Slideshow */
+const slides = ["photo1.jpg", "photo2.jpg", "photo3.jpg"];
+let currentSlide = 0;
+
+setInterval(() => {
+    currentSlide = (currentSlide + 1) % slides.length;
+    document.getElementById("slide").src = slides[currentSlide];
+}, 3000);
+
+/* Fireworks */
 function launchFireworks() {
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 10; i++) {
         fireworks.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
