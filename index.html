@@ -14,7 +14,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Soft glow blur background */
+/* Soft glow */
 body::before {
     content: "";
     position: fixed;
@@ -23,6 +23,20 @@ body::before {
                 radial-gradient(circle at 70% 70%, #ff69b488, transparent 40%);
     filter: blur(60px);
     z-index: -1;
+}
+
+/* Floating lilies */
+.lily {
+    position: fixed;
+    font-size: 30px;
+    animation: float 6s infinite ease-in-out;
+    opacity: 0.8;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
 }
 
 .overlay {
@@ -41,13 +55,22 @@ body::before {
 }
 
 .container {
-    margin-top: 15vh;
+    margin-top: 10vh;
     padding: 20px;
 }
 
 h1 {
     font-size: 28px;
     color: #ff2e88;
+}
+
+/* Slideshow in middle */
+.slideshow img {
+    width: 260px;
+    height: auto;
+    border-radius: 20px;
+    margin: 20px 0;
+    box-shadow: 0 10px 25px rgba(255,105,180,0.4);
 }
 
 button {
@@ -76,15 +99,6 @@ button {
     font-size: 20px;
     color: #ff2e88;
     font-weight: bold;
-}
-
-/* Slideshow */
-.slideshow img {
-    width: 250px;
-    height: auto;
-    border-radius: 20px;
-    margin-top: 20px;
-    box-shadow: 0 10px 25px rgba(255,105,180,0.4);
 }
 
 /* Shake */
@@ -116,12 +130,18 @@ footer {
 
 <body>
 
+<!-- Floating Lilies -->
+<div class="lily" style="top:10%; left:5%;">🌸</div>
+<div class="lily" style="top:20%; right:8%; animation-delay:1s;">🌸</div>
+<div class="lily" style="bottom:15%; left:10%; animation-delay:2s;">🌸</div>
+<div class="lily" style="bottom:20%; right:5%; animation-delay:3s;">🌸</div>
+
 <div class="overlay" onclick="startExperience()">
     Tap to start the magic 💖
 </div>
 
 <audio id="bgMusic" loop>
-    <source src="love.mp3.mp3" type="audio/mpeg">
+    <source src="love.mp3" type="audio/mpeg">
 </audio>
 
 <canvas id="fireworks"></canvas>
@@ -129,14 +149,15 @@ footer {
 <div class="container">
     <h1>Marilag 💖<br>Will you be my Valentine?</h1>
 
+    <!-- IMAGE IN BETWEEN -->
+    <div class="slideshow">
+        <img id="slide" src="photo1.jpg">
+    </div>
+
     <button id="yesBtn" onclick="yesClick()">Yes 💘</button>
     <button id="noBtn">No 💔</button>
 
     <div id="response"></div>
-
-    <div class="slideshow">
-        <img id="slide" src="photo1.jpg">
-    </div>
 
     <footer>
         Forever yours, Bilal ur boyfriend 💖
@@ -155,11 +176,11 @@ canvas.height = window.innerHeight;
 
 let fireworks = [];
 
-/* Start Music */
+/* Start Experience */
 function startExperience() {
     overlay.style.display = "none";
     music.volume = 0;
-    music.play();
+    music.play().catch(()=>{});
     fadeInMusic();
 }
 
@@ -175,7 +196,7 @@ function fadeInMusic() {
     }, 200);
 }
 
-/* Yes Click */
+/* Yes Button */
 function yesClick() {
     document.body.classList.add("shake");
     setTimeout(() => {
@@ -188,7 +209,7 @@ function yesClick() {
     launchFireworks();
 }
 
-/* No Button Run Away */
+/* No Button Run */
 noBtn.addEventListener("mouseover", () => {
     noBtn.style.top = Math.random() * 70 + "%";
     noBtn.style.left = Math.random() * 70 + "%";
@@ -205,7 +226,7 @@ setInterval(() => {
 
 /* Fireworks */
 function launchFireworks() {
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 12; i++) {
         fireworks.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
